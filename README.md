@@ -1,4 +1,4 @@
-# **Onelink - A Full-Stack Personal Portfolio Platform**
+# **Onelink - A Full-Stack Application**
 Onelink is a full-stack **MERN** application designed to offer a personalized link system similar to **Linktree**, with management, authentication, and public viewing functionalities. This project integrates a frontend developed with **React + TypeScript** and a robust backend with **Node.js + Express**.
 
 ## Main View
