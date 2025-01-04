@@ -1,0 +1,47 @@
+services:
+  frontend:
+    # Builds and exposes the frontend app via Nginx
+    build: ./frontend
+    ports:
+      - "5173:3000"
+    env_file:
+      - ./frontend/.env.docker
+    depends_on:
+      - backend
+    networks:
+      - onelink-network
+
+  backend:
+    # Node API container
+    build: ./backend
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env.docker
+    depends_on:
+      - mongo
+    networks:
+      - onelink-network
+
+  mongo:
+    # MongoDB database service
+    image: mongo:6
+    container_name: mongo
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: onelink
+    networks:
+      - onelink-network
+
+# Network to connect all containers
+networks:
+  onelink-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
