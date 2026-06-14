@@ -1,23 +1,26 @@
-# Use the official Node.js 18 image based on Alpine Linux
-FROM node:18-alpine
+# Use Node.js 22 Alpine
+FROM node:22-alpine
 
-# Set the working directory inside the container
+# Install pnpm using corepack
+RUN corepack enable
+
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package.json package-lock.json ./
+# Copy package.json
+COPY package.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies using pnpm
+RUN pnpm install --no-frozen-lockfile
 
-# Copy the rest of the application code to the working directory
+# Copy the rest of the backend files
 COPY . .
 
-# Compile TypeScript to JavaScript
-RUN npm run build
+# Compile TypeScript
+RUN pnpm run build
 
-# Expose port 4000 to the outside world
+# Expose port 4000
 EXPOSE 4000
 
-# Command to run the application
+# Command to run
 CMD ["node", "dist/index.js"]

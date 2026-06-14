@@ -31,7 +31,6 @@ export default function Profile() {
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });
-      window.location.reload();
     },
   });
 
@@ -54,10 +53,13 @@ export default function Profile() {
   };
 
   const handleUserProfileForm = (formData: ProfileForm) => {
-    const user: User = queryClient.getQueryData<User>(["user"])!;
-    user.description = formData.description;
-    user.handle = formData.handle;
-    updateProfileMutation.mutate(user);
+    const user = queryClient.getQueryData<User>(["user"])!;
+    const updatedUser = {
+      ...user,
+      description: formData.description,
+      handle: formData.handle,
+    };
+    updateProfileMutation.mutate(updatedUser);
   };
 
   return (

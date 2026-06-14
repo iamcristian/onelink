@@ -9,6 +9,7 @@ import {
 } from "../handlers/profile";
 import { validateSchema } from "../middleware/validateSchema";
 import { searchByHandleSchema, updateUserSchema } from "../schemas/userSchema";
+import { asyncHandler } from "../utils/asyncHandler";
 
 const router = Router();
 
@@ -21,7 +22,7 @@ const router = Router();
  *       200:
  *         description: Successfully retrieved user
  */
-router.get("/user", authenticate, getUser);
+router.get("/user", authenticate, asyncHandler(getUser));
 
 /**
  * @swagger
@@ -44,7 +45,7 @@ router.patch(
   "/user",
   validateSchema(updateUserSchema),
   authenticate,
-  updateProfile
+  asyncHandler(updateProfile)
 );
 
 /**
@@ -62,7 +63,7 @@ router.patch(
  *       500:
  *         description: Server error while uploading image
  */
-router.post("/user/image", authenticate, uploadImage);
+router.post("/user/image", authenticate, asyncHandler(uploadImage));
 
 /**
  * @swagger
@@ -81,7 +82,7 @@ router.post("/user/image", authenticate, uploadImage);
  *       500:
  *         description: Server error while fetching user by handle
  */
-router.get("/user/:handle", getUserByHandle);
+router.get("/user/:handle", asyncHandler(getUserByHandle));
 
 /**
  * @swagger
@@ -103,7 +104,7 @@ router.get("/user/:handle", getUserByHandle);
 router.post(
   "/user/search",
   validateSchema(searchByHandleSchema),
-  searchByHandle
+  asyncHandler(searchByHandle)
 );
 
 export default router;

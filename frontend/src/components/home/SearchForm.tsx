@@ -29,10 +29,8 @@ function SearchForm() {
     mutationFn: searchByHandle,
   });
 
-  const handle = form.watch("handle");
-
-  const handleSearch = () => {
-    mutation.mutate(handle);
+  const handleSearch = (data: SearchByHandleFormData) => {
+    mutation.mutate(data.handle);
   };
 
   return (
@@ -79,7 +77,7 @@ function SearchForm() {
               Username is available. Go to{" "}
               <Link
                 to="/auth/register"
-                state={{ handle }}
+                state={{ handle: form.getValues("handle") }}
                 className="text-blue-500 underline hover:text-blue-700"
               >
                 Register

@@ -1,6 +1,5 @@
 import { SocialNetwork, User } from "@/types/user";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import {
   arrayMove,
   SortableContext,
@@ -18,15 +17,7 @@ type LinksProps = {
 };
 
 function LinksComponent({ data }: LinksProps) {
-  const [enabledLinks, setEnabledLinks] = useState<SocialNetwork[]>(
-    data.links.filter((item: SocialNetwork) => item.enabled)
-  );
-
-  useEffect(() => {
-    setEnabledLinks(
-      data.links.filter((item: SocialNetwork) => item.enabled)
-    );
-  }, [data]);
+  const enabledLinks = data.links.filter((item: SocialNetwork) => item.enabled);
 
   const queryClient = useQueryClient();
   const handleDragEnd = (event: DragEndEvent) => {
@@ -36,7 +27,6 @@ function LinksComponent({ data }: LinksProps) {
       const prevIndex = enabledLinks.findIndex((link) => link.id === active.id);
       const newIndex = enabledLinks.findIndex((link) => link.id === over.id);
       const order = arrayMove(enabledLinks, prevIndex, newIndex);
-      setEnabledLinks(order);
 
       const disabledLinks: SocialNetwork[] = data.links.filter(
         (item: SocialNetwork) => !item.enabled

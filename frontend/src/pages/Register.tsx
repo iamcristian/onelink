@@ -16,7 +16,8 @@ import { registerUserSchema } from "@/schemas/userSchema";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router";
 import { isAxiosError } from "axios";
-import api from "@/config/axios";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "@/api/auth";
 import {
   Card,
   CardContent,
@@ -43,16 +44,24 @@ const Register = () => {
     defaultValues,
   });
 
-  const handleRegister = async (formData: RegisterFormValues) => {
-    try {
-      const { data } = await api.post("/auth/register", formData);
+  const mutation = useMutation({
+    mutationFn: register,
+    onSuccess: (data) => {
       toast.success(data.message);
       form.reset();
       navigate("/auth/login");
-    } catch (error) {
-      if (isAxiosError(error) && error.response)
+    },
+    onError: (error) => {
+      if (isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);
-    }
+      } else {
+        toast.error("An error occurred during registration.");
+      }
+    },
+  });
+
+  const handleRegister = (formData: RegisterFormValues) => {
+    mutation.mutate(formData);
   };
 
   return (
@@ -150,8 +159,8 @@ const Register = () => {
                 )}
               />
 
-              <Button type="submit" className="w-full">
-                Register
+              <Button type="submit" className="w-full" disabled={mutation.isPending}>
+                {mutation.isPending ? "Registering..." : "Register"}
               </Button>
             </form>
           </Form>

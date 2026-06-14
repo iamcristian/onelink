@@ -31,7 +31,22 @@ app.use(helmet());
 app.use("/", apiLimiter);
 
 // Define the routes
-app.use("/", routerAuth);
+app.use("/api", routerAuth);
 app.use("/api", router);
+
+// Global error handling middleware
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error(err.stack || err);
+    res.status(err.status || 500).json({
+      message: err.message || "Internal Server Error",
+    });
+  }
+);
 
 export default app;

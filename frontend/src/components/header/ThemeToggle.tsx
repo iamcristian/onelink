@@ -1,4 +1,4 @@
-import { useTheme } from "@/hooks/use-theme";
+import { useTheme } from "next-themes";
 import { Check, Palette, Moon, Sun } from "lucide-react";
 import {
   DropdownMenu,

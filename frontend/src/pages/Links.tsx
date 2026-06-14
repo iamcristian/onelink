@@ -2,17 +2,27 @@ import { updateProfile } from "@/api/user";
 import { social } from "@/data/social";
 import { SocialNetwork, User } from "@/types/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { isValidUrl } from "@/lib/utils";
 import SocialLinkInput from "@/components/SocialLinkInput";
 import { Button } from "@/components/ui/button";
 
 function Links() {
-  const [socialLinks, setSocialLinks] = useState(social);
-
   const queryClient = useQueryClient();
   const user: User = queryClient.getQueryData(["user"])!;
+
+  const [socialLinks, setSocialLinks] = useState(() => {
+    return social.map((item) => {
+      const userLink = user.links.find(
+        (link: SocialNetwork) => link.name === item.name
+      );
+      if (userLink) {
+        return { ...item, url: userLink.url, enabled: userLink.enabled };
+      }
+      return item;
+    });
+  });
 
   const { mutate } = useMutation({
     mutationFn: updateProfile,
@@ -23,19 +33,6 @@ function Links() {
       toast.success("Profile updated successfully");
     },
   });
-
-  useEffect(() => {
-    const updatedData = socialLinks.map((item) => {
-      const userLink = user.links.find(
-        (link: SocialNetwork) => link.name === item.name
-      );
-      if (userLink) {
-        return { ...item, url: userLink.url, enabled: userLink.enabled };
-      }
-      return item;
-    });
-    setSocialLinks(updatedData);
-  }, []);
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedLinks = socialLinks.map((link) =>

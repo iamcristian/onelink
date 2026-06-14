@@ -2,28 +2,31 @@ import api from "@/config/axios";
 import { User, UserHandle } from "@/types/user";
 import { isAxiosError } from "axios";
 
-export async function searchByHandle(handle: string) {
+export const searchByHandle = async (handle: string): Promise<string> => {
   try {
     const { data } = await api.post<string>("/api/user/search", { handle });
-    console.log(data);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response)
+    if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message);
+    }
+    throw error;
   }
-}
+};
 
-export async function getUser() {
+export const getUser = async (): Promise<User> => {
   try {
     const { data } = await api.get<User>("/api/user");
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response)
+    if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message);
+    }
+    throw error;
   }
-}
+};
 
-export async function updateProfile(formData: User) {
+export const updateProfile = async (formData: User): Promise<string> => {
   try {
     const { data } = await api.patch<string>("/api/user", formData);
     return data;
@@ -31,14 +34,15 @@ export async function updateProfile(formData: User) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message);
     }
+    throw error;
   }
-}
+};
 
-export async function uploadImage(file: File) {
+export const uploadImage = async (file: File): Promise<{ data: { image: string } }> => {
   const formData = new FormData();
   formData.append("file", file);
   try {
-    const data: { data: { image: string } } = await api.post(
+    const { data } = await api.post<{ data: { image: string } }>(
       "/api/user/image",
       formData
     );
@@ -47,16 +51,18 @@ export async function uploadImage(file: File) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message);
     }
+    throw error;
   }
-}
+};
 
-export async function getUserByHandle(handle: string) {
+export const getUserByHandle = async (handle: string): Promise<UserHandle> => {
   try {
-    const { data } = await api<UserHandle>(`/api/user/${handle}`);
+    const { data } = await api.get<UserHandle>(`/api/user/${handle}`);
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error);
+      throw new Error(error.response.data.message);
     }
+    throw error;
   }
-}
+};

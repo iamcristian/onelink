@@ -1,26 +1,29 @@
-# Use the official Node.js image based on Alpine Linux
-FROM node:18-alpine
+# Use Node.js 22 Alpine
+FROM node:22-alpine
 
-# Set the working directory inside the container
+# Install pnpm using corepack
+RUN corepack enable
+
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package.json package-lock.json ./
+# Copy package.json
+COPY package.json ./
 
-# Install the project dependencies
-RUN npm install
+# Install dependencies using pnpm
+RUN pnpm install --no-frozen-lockfile
 
-# Install the 'serve' package globally
-RUN npm install -g serve
+# Install 'serve' package globally using pnpm
+RUN pnpm add -g serve
 
-# Copy the rest of the application code to the working directory
+# Copy the rest of the frontend files
 COPY . .
 
 # Build the project
-RUN npm run build
+RUN pnpm run build
 
-# Expose port 3000 to the outside world
+# Expose port 3000
 EXPOSE 3000
 
-# Command to run the application using 'serve'
+# Command to run
 CMD ["serve", "-s", "dist"]

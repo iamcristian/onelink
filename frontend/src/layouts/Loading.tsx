@@ -1,8 +1,6 @@
-import { Skeleton } from "@/components/ui/skeleton"; // Asegúrate de que la ruta sea correcta
-import { useTheme } from "@/hooks/use-theme";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Loading = () => {
-  useTheme();
   return (
     <>
       <div className="flex flex-col min-h-screen px-4 md:px-12 lg:px-32">
