@@ -1,24 +1,16 @@
 import { SocialNetwork } from "@/types/user";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 import { Link2, GripVertical } from "lucide-react";
 
 type OneLinkProps = {
   link: SocialNetwork;
   theme: string;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null;
 };
 
 const standardNames = ["facebook", "github", "instagram", "x", "youtube", "tiktok", "twitch", "linkedin"];
 
-export default function OneLink({ link, theme }: OneLinkProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: link.name });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
+export default function OneLink({ link, theme, dragHandleProps }: OneLinkProps) {
   const isStandard = standardNames.includes(link.name.toLowerCase());
 
   // Theme styling definitions for buttons inside the phone preview
@@ -33,14 +25,11 @@ export default function OneLink({ link, theme }: OneLinkProps) {
 
   return (
     <div
-      ref={setNodeRef}
-      style={style}
       className={`px-3 py-2 flex items-center gap-2 rounded-xl transition-colors duration-200 select-none ${currentBtnStyle}`}
     >
       {/* Drag handle */}
       <div
-        {...attributes}
-        {...listeners}
+        {...dragHandleProps}
         className="cursor-grab active:cursor-grabbing opacity-40 hover:opacity-95 p-1 text-current flex-shrink-0"
       >
         <GripVertical className="h-4 w-4" />

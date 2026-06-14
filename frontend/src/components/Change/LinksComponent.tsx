@@ -1,11 +1,7 @@
 import { SocialNetwork, User } from "@/types/user";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { closestCenter, DndContext, DragEndEvent } from "@dnd-kit/core";
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router";
 import OneLink from "./OneLink";
 import { Toaster } from "sonner";
@@ -45,34 +41,47 @@ function LinksComponent({ data }: LinksProps) {
   const profileUrl = `${window.location.origin}/${data.handle}`;
 
   const queryClient = useQueryClient();
+  const [isReady, setIsReady] = useState(false);
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
+  useEffect(() => {
+    const animation = requestAnimationFrame(() => setIsReady(true));
+    return () => {
+      cancelAnimationFrame(animation);
+      setIsReady(false);
+    };
+  }, []);
 
-    if (over && active.id !== over.id) {
-      const prevIndex = enabledLinks.findIndex((link) => link.name === active.id);
-      const newIndex = enabledLinks.findIndex((link) => link.name === over.id);
-      const order = arrayMove(enabledLinks, prevIndex, newIndex);
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    
+    const { source, destination } = result;
+    if (source.index === destination.index) return;
 
-      const disabledLinks: SocialNetwork[] = data.links.filter(
-        (item: SocialNetwork) => !item.enabled
-      );
+    const prevIndex = source.index;
+    const newIndex = destination.index;
 
-      // Re-assign sequential ids for sorting list integrity
-      let idCounter = 1;
-      const reordered = order.map(link => ({ ...link, id: idCounter++ }));
-      const disabledReset = disabledLinks.map(link => ({ ...link, id: 0 }));
+    const order = [...enabledLinks];
+    const [movedItem] = order.splice(prevIndex, 1);
+    order.splice(newIndex, 0, movedItem);
 
-      const links = reordered.concat(disabledReset);
+    const disabledLinks: SocialNetwork[] = data.links.filter(
+      (item: SocialNetwork) => !item.enabled
+    );
 
-      queryClient.setQueryData(["user"], (prevData: User | undefined) => {
-        if (!prevData) return prevData;
-        return {
-          ...prevData,
-          links: links,
-        };
-      });
-    }
+    // Re-assign sequential ids for sorting list integrity
+    let idCounter = 1;
+    const reordered = order.map(link => ({ ...link, id: idCounter++ }));
+    const disabledReset = disabledLinks.map(link => ({ ...link, id: 0 }));
+
+    const links = reordered.concat(disabledReset);
+
+    queryClient.setQueryData(["user"], (prevData: User | undefined) => {
+      if (!prevData) return prevData;
+      return {
+        ...prevData,
+        links: links,
+      };
+    });
   };
 
   const handleCopyLink = () => {
@@ -167,29 +176,69 @@ function LinksComponent({ data }: LinksProps) {
                   </div>
 
                   {/* Sortable Links Preview Area */}
-                  <DndContext
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                  >
-                    <div className="mt-4 flex flex-col gap-2.5 flex-grow">
-                      <SortableContext
-                        items={enabledLinks.map(l => l.name)}
-                        strategy={verticalListSortingStrategy}
-                      >
-                        {enabledLinks.length > 0 ? (
-                          enabledLinks.map((link) => (
-                            <OneLink key={link.name} link={link} theme={theme} />
-                          ))
-                        ) : (
-                          <div className="flex-grow flex items-center justify-center text-center p-4">
-                            <p className="text-[10px] opacity-40 italic">
-                              No active links to show. Toggle profiles or add custom links in the editor to see them here!
-                            </p>
+                  {isReady ? (
+                    <DragDropContext onDragEnd={handleDragEnd}>
+                      <Droppable droppableId="links-list">
+                        {(provided) => (
+                          <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            className="mt-4 flex flex-col gap-2.5 flex-grow"
+                          >
+                            {enabledLinks.length > 0 ? (
+                              enabledLinks.map((link, index) => (
+                                <Draggable
+                                  key={link.name}
+                                  draggableId={link.name}
+                                  index={index}
+                                >
+                                  {(provided, snapshot) => (
+                                    <div
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      style={provided.draggableProps.style as React.CSSProperties}
+                                      className={`transition-all duration-150 ${
+                                        snapshot.isDragging
+                                          ? "scale-[1.02] rotate-1 shadow-lg z-50 opacity-90"
+                                          : ""
+                                      }`}
+                                    >
+                                      <OneLink
+                                        link={link}
+                                        theme={theme}
+                                        dragHandleProps={provided.dragHandleProps}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              ))
+                            ) : (
+                              <div className="flex-grow flex items-center justify-center text-center p-4">
+                                <p className="text-[10px] opacity-40 italic">
+                                  No active links to show. Toggle profiles or add custom links in the editor to see them here!
+                                </p>
+                              </div>
+                            )}
+                            {provided.placeholder}
                           </div>
                         )}
-                      </SortableContext>
+                      </Droppable>
+                    </DragDropContext>
+                  ) : (
+                    <div className="mt-4 flex flex-col gap-2.5 flex-grow">
+                      {enabledLinks.length > 0 ? (
+                        enabledLinks.map((link) => (
+                          <OneLink key={link.name} link={link} theme={theme} />
+                        ))
+                      ) : (
+                        <div className="flex-grow flex items-center justify-center text-center p-4">
+                          <p className="text-[10px] opacity-40 italic">
+                            No active links to show. Toggle profiles or add custom links in the editor to see them here!
+                          </p>
+                        </div>
+                      )}
                     </div>
-                  </DndContext>
+                  )}
                   
                   {/* Branding info inside card */}
                   <div className="pt-4 border-t border-current/10 text-center opacity-60">
