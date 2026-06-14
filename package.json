@@ -1,0 +1,17 @@
+{
+  "name": "onelink-monorepo",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "pnpm --filter onelink-frontend dev",
+    "dev:backend": "pnpm --filter onelink-backend dev",
+    "dev": "pnpm --parallel --filter onelink-frontend --filter onelink-backend dev",
+    "build": "pnpm --filter onelink-frontend build && pnpm --filter onelink-backend build"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "argon2",
+      "esbuild"
+    ]
+  }
+}

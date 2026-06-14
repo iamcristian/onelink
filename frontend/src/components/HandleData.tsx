@@ -5,7 +5,7 @@ type HandleDataProps = {
 };
 
 function HandleData({ data }: HandleDataProps) {
-  const links: SocialNetwork[] = JSON.parse(data.links).filter(
+  const links: SocialNetwork[] = data.links.filter(
     (link: SocialNetwork) => link.enabled
   );
 

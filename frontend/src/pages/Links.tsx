@@ -26,7 +26,7 @@ function Links() {
 
   useEffect(() => {
     const updatedData = socialLinks.map((item) => {
-      const userLink = JSON.parse(user.links).find(
+      const userLink = user.links.find(
         (link: SocialNetwork) => link.name === item.name
       );
       if (userLink) {
@@ -44,7 +44,7 @@ function Links() {
     setSocialLinks(updatedLinks);
   };
 
-  const links: SocialNetwork[] = JSON.parse(user.links);
+  const links: SocialNetwork[] = user.links;
 
   const handleEnableLink = (socialNetwork: string) => {
     const updatedLinks = socialLinks.map((link) => {
@@ -106,7 +106,7 @@ function Links() {
     }
 
     queryClient.setQueryData(["user"], (prevData: User) => {
-      return { ...prevData, links: JSON.stringify(updatedItems) };
+      return { ...prevData, links: updatedItems };
     });
   };
 

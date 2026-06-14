@@ -5,7 +5,7 @@ export type User = {
   _id: string;
   description: string;
   image: string;
-  links: string;
+  links: SocialNetwork[];
 };
 
 export type UserHandle = Pick<

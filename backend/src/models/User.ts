@@ -1,5 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+export interface ISocialNetwork {
+  id: number;
+  name: string;
+  url: string;
+  enabled: boolean;
+}
+
 // Document includes properties like save, validate, and remove
 export interface IUser extends Document {
   handle: string;
@@ -8,8 +15,29 @@ export interface IUser extends Document {
   password: string;
   description: string;
   image: string;
-  links: string;
+  links: ISocialNetwork[];
 }
+
+const socialNetworkSchema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  url: {
+    type: String,
+    trim: true,
+    default: "",
+  },
+  enabled: {
+    type: Boolean,
+    default: false,
+  },
+}, { _id: false });
 
 // Schema is a class used to define the structure of documents within a collection
 const userSchema = new Schema({
@@ -44,8 +72,8 @@ const userSchema = new Schema({
     default: "",
   },
   links: {
-    type: String,
-    default: "[]",
+    type: [socialNetworkSchema],
+    default: [],
   },
 });
 

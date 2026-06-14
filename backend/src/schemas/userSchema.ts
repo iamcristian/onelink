@@ -1,5 +1,12 @@
 import z from "zod";
 
+const socialNetworkSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  url: z.string(),
+  enabled: z.boolean(),
+});
+
 export const userSchema = z.object({
   handle: z.string().min(3).max(30),
   name: z.string().min(3).max(255),
@@ -7,7 +14,7 @@ export const userSchema = z.object({
   password: z.string().min(8).max(255),
   description: z.string().max(255),
   image: z.string().url(),
-  links: z.string().optional(),
+  links: z.array(socialNetworkSchema).optional(),
 });
 
 export const registerUserSchema = userSchema.pick({
@@ -25,9 +32,9 @@ export const loginUserSchema = userSchema.pick({
 export const updateUserSchema = z.object({
   handle: z.string().min(3).max(255).optional(),
   description: z.string().max(255).optional(),
-  links: z.string().optional(),
+  links: z.array(socialNetworkSchema).optional(),
 });
 
 export const searchByHandleSchema = userSchema.pick({
   handle: true,
-})
+});

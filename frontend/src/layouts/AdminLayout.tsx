@@ -12,13 +12,12 @@ export default function AdminLayout() {
     refetchOnWindowFocus: false,
   });
 
-  const NavigateInError = () => {
-    localStorage.removeItem("token");
-    return isError && <Navigate to="/auth/login" />;
-  };
-
   if (isLoading) return <Loading />;
-  if (isError) return <NavigateInError />;
+  
+  if (isError) {
+    localStorage.removeItem("token");
+    return <Navigate to="/auth/login" />;
+  }
 
   if (data) return <LinksComponent data={data} />;
 }

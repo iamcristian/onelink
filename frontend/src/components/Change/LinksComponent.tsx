@@ -19,12 +19,12 @@ type LinksProps = {
 
 function LinksComponent({ data }: LinksProps) {
   const [enabledLinks, setEnabledLinks] = useState<SocialNetwork[]>(
-    JSON.parse(data.links).filter((item: SocialNetwork) => item.enabled)
+    data.links.filter((item: SocialNetwork) => item.enabled)
   );
 
   useEffect(() => {
     setEnabledLinks(
-      JSON.parse(data.links).filter((item: SocialNetwork) => item.enabled)
+      data.links.filter((item: SocialNetwork) => item.enabled)
     );
   }, [data]);
 
@@ -38,7 +38,7 @@ function LinksComponent({ data }: LinksProps) {
       const order = arrayMove(enabledLinks, prevIndex, newIndex);
       setEnabledLinks(order);
 
-      const disabledLinks: SocialNetwork[] = JSON.parse(data.links).filter(
+      const disabledLinks: SocialNetwork[] = data.links.filter(
         (item: SocialNetwork) => !item.enabled
       );
 
@@ -47,7 +47,7 @@ function LinksComponent({ data }: LinksProps) {
       queryClient.setQueryData(["user"], (prevData: User) => {
         return {
           ...prevData,
-          links: JSON.stringify(links),
+          links: links,
         };
       });
     }
