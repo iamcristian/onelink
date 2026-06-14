@@ -14,11 +14,13 @@ export default function Profile() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
       handle: data.handle,
       description: data.description,
+      profileTheme: data.profileTheme || "midnight",
     },
   });
 
@@ -58,6 +60,7 @@ export default function Profile() {
       ...user,
       description: formData.description,
       handle: formData.handle,
+      profileTheme: formData.profileTheme,
     };
     updateProfileMutation.mutate(updatedUser);
   };
@@ -105,6 +108,38 @@ export default function Profile() {
           accept="image/*"
           onChange={handleChange}
         />
+      </div>
+
+      <div className="grid grid-cols-1 gap-2">
+        <label className="font-semibold">Profile Theme:</label>
+        <div className="grid grid-cols-2 gap-3 mt-1">
+          {[
+            { id: "midnight", name: "Midnight Sky", class: "bg-slate-900 text-white border-slate-700" },
+            { id: "sunset", name: "Sunset Rose", class: "bg-gradient-to-br from-pink-400 to-orange-400 text-slate-900 border-orange-300" },
+            { id: "neobrutalism", name: "Neo-Brutalism", class: "bg-yellow-300 text-black border-black border-2" },
+            { id: "minimalist", name: "Minimalist", class: "bg-white text-black border-neutral-300" },
+          ].map((t) => (
+            <label
+              key={t.id}
+              className={`cursor-pointer rounded-lg p-3 flex flex-col justify-between h-20 border-2 transition-all ${
+                watch("profileTheme") === t.id
+                  ? "border-blue-600 ring-2 ring-blue-600/30 scale-[1.03]"
+                  : "border-transparent opacity-85 hover:opacity-100"
+              } ${t.class}`}
+            >
+              <input
+                type="radio"
+                value={t.id}
+                className="sr-only"
+                {...register("profileTheme")}
+              />
+              <span className="text-xs font-bold uppercase tracking-wider">
+                {t.name}
+              </span>
+              <span className="text-[10px] opacity-75">Sample Link</span>
+            </label>
+          ))}
+        </div>
       </div>
 
       <Button type="submit" className="p-2 text-lg w-full">
