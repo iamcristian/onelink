@@ -1,5 +1,13 @@
 import z from "zod";
 
+const socialNetworkSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  url: z.string(),
+  enabled: z.boolean(),
+  clicks: z.number().optional(),
+});
+
 export const userSchema = z.object({
   handle: z
     .string()
@@ -24,7 +32,8 @@ export const userSchema = z.object({
     .max(255, { message: "Password must be at most 255 characters long" }),
   description: z.string().max(255),
   image: z.string().url(),
-  links: z.string().optional(),
+  profileTheme: z.string().optional(),
+  links: z.array(socialNetworkSchema).optional(),
 });
 
 export const registerUserSchema = userSchema
@@ -57,7 +66,8 @@ export const loginUserSchema = userSchema.pick({
 export const updateUserSchema = z.object({
   handle: z.string().min(3).max(255).optional(),
   description: z.string().max(255).optional(),
-  links: z.string().optional(),
+  profileTheme: z.string().optional(),
+  links: z.array(socialNetworkSchema).optional(),
 });
 
 export const searchByHandleSchema = userSchema.pick({

@@ -5,6 +5,7 @@ export interface ISocialNetwork {
   name: string;
   url: string;
   enabled: boolean;
+  clicks: number;
 }
 
 // Document includes properties like save, validate, and remove
@@ -16,6 +17,7 @@ export interface IUser extends Document {
   description: string;
   image: string;
   links: ISocialNetwork[];
+  profileTheme: string;
 }
 
 const socialNetworkSchema = new Schema({
@@ -36,6 +38,10 @@ const socialNetworkSchema = new Schema({
   enabled: {
     type: Boolean,
     default: false,
+  },
+  clicks: {
+    type: Number,
+    default: 0,
   },
 }, { _id: false });
 
@@ -70,6 +76,10 @@ const userSchema = new Schema({
   image: {
     type: String,
     default: "",
+  },
+  profileTheme: {
+    type: String,
+    default: "midnight",
   },
   links: {
     type: [socialNetworkSchema],

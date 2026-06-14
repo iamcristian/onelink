@@ -5,6 +5,7 @@ const socialNetworkSchema = z.object({
   name: z.string(),
   url: z.string(),
   enabled: z.boolean(),
+  clicks: z.number().optional(),
 });
 
 export const userSchema = z.object({
@@ -14,6 +15,7 @@ export const userSchema = z.object({
   password: z.string().min(8).max(255),
   description: z.string().max(255),
   image: z.string().url(),
+  profileTheme: z.string().optional(),
   links: z.array(socialNetworkSchema).optional(),
 });
 
@@ -32,6 +34,7 @@ export const loginUserSchema = userSchema.pick({
 export const updateUserSchema = z.object({
   handle: z.string().min(3).max(255).optional(),
   description: z.string().max(255).optional(),
+  profileTheme: z.string().optional(),
   links: z.array(socialNetworkSchema).optional(),
 });
 
