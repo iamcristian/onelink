@@ -1,134 +1,101 @@
-# **Onelink - A Full-Stack Application**
-Onelink is a full-stack **MERN** application designed to offer a personalized link system similar to **Linktree**, with management, authentication, and public viewing functionalities. This project integrates a frontend developed with **React + TypeScript** and a robust backend with **Node.js + Express**.
+# **Onelink - Premium MERN Monorepo**
 
-## Main View
-![{BA558601-7DB4-459E-945C-7C9853628D57}](https://github.com/user-attachments/assets/4b86d415-5b99-4b9c-bf83-2e50951e903f)
-## Light and Dark Mode
-![{1055BB1B-84A4-49DE-910A-C464A03FCC66}](https://github.com/user-attachments/assets/eef35759-a2f3-41e8-ad9a-d470d2bf188e)
-![{C3260D29-9D40-47F6-90FD-1199C882800D}](https://github.com/user-attachments/assets/6722f806-a84b-4fb5-8612-d340aadff043)
-## Search by username and verify if it's available
-![{B58D9BC5-FD6F-4C55-9271-90A47DF6AC6B}](https://github.com/user-attachments/assets/0857abcb-6b1a-40ba-84bf-60419c7033fe)
-## Add Social Network Links and Custom with Drag and Drop
-![{06259EB5-A126-4B31-9477-A9DD4F776163}](https://github.com/user-attachments/assets/2280565e-89be-438a-9b8a-f82df03e7037)
-## Link Available for all users with the link
-![{772B6684-E29A-4A68-803B-A82D8BEE239A}](https://github.com/user-attachments/assets/6f2bbf6e-d55d-45e1-979e-63000f569a4b)
+Onelink is a full-stack **MERN** application designed to offer a personalized link-in-bio system (similar to **Linktree**). It features profile customization, link sorting, and real-time visual analytics.
+
+This project is organized as a modern **pnpm monorepo workspace**, bundling a frontend React SPA and a backend Express TypeScript API service under a unified structure.
 
 ---
 
-## **Main Features**
-### **Frontend**
-- **Dynamic routing system** with `react-router` and custom layouts.
-- **Data validation** and form handling with React Query, Zod, and React Hook Form.
-- **Modern styling** with Tailwind CSS and Shadcn.
-- **Advanced interactions** like Drag-and-Drop using dnd-kit.
-### **Backend**
-- **Secure JWT authentication** with middleware.
-- **APIs for profiles and links**, including CRUD operations.
-- **API documentation** automatically generated with Swagger.
-- **Security and validation** with CORS, Zod, and rate limiters.
-- **Image management** using the Cloudinary API.
+## **Key Features**
+
+### **Frontend (Vite + React + TS)**
+*   **Keystroke-Optimized Forms**: Uses React Hook Form with performant validation, completely avoiding render-lag on typing.
+*   **Dynamic Theme Picker**: Customize your public profile page's design. Includes premium styles:
+    *   *Midnight Sky*: Glassmorphic components over dark blue gradients.
+    *   *Sunset Rose*: Soft pastel pink-orange styling.
+    *   *Neo-Brutalism*: Flat bold layouts with heavy solid shadows.
+    *   *Minimalist*: Clean, high-contrast dark/light outline aesthetics.
+*   **Visual Analytics Dashboard**: Real-time link clicks tracking using **Recharts** bar graphs.
+*   **Advanced Interactions**: Drag-and-drop link sorting using `@dnd-kit`.
+*   **Standard Theme Injection**: Standard dark/light mode switching powered by `next-themes`.
+
+### **Backend (Node.js + Express + TS)**
+*   **Robust Async Middleware**: Global Express error handler utilizing an `asyncHandler` wrapper to securely capture database exceptions.
+*   **REST API Standard**: Standardized endpoints grouped logically under `/api` (`/api/auth/*` and `/api/user/*`).
+*   **TypeScript Native Engine**: Dev servers run typescript files natively inside Node 24 (`tsx`), providing instant startup times.
+*   **Mongoose Subdocuments**: Stores user links inside a typed array of subdocuments in MongoDB for optimal query performance.
+*   **Cloud Image Uploads**: Integrates with Cloudinary for avatar uploads.
+
 ---
-## **Technologies Used**
-### **Frontend**
-- React + TypeScript
-- Vite (for fast development and build)
-- Tailwind CSS + Shadcn
-- React Query and Axios
-- Storybook
-- dnd-kit
-- Zod
-### **Backend**
-- Node.js + TypeScript
-- Express
-- MongoDB + Mongoose
-- JWT (JSON Web Tokens)
-- Swagger
-- Argon2
-- Zod
-- Cloudinary API
-### **Infrastructure and Tools**
-- Docker and Docker Compose
-- Git
----
+
 ## **Prerequisites**
-Before starting, make sure you have the following installed on your machine:
-- **Node.js** (v22 or higher)
-- **npm**
-- **MongoDB** (local or cloud, like Atlas)
-- **Git**
-- **Docker** and **Docker Compose**
+
+*   **Node.js** v22+ / v24+
+*   **pnpm** v10+ (Install globally via `npm i -g pnpm` or enable via `corepack enable`)
+*   **MongoDB** (Local or cloud)
+*   **Docker** (Optional, for running MongoDB locally)
+
 ---
-## **Local Installation**
-### **1. Clone the repository**
+
+## **Local Installation & Setup**
+
+### **1. Clone the Repository**
 ```bash
 git clone https://github.com/iamcristian/onelink.git
 cd onelink
 ```
-### **2. Configure the Frontend**
-1. Navigate to the frontend directory:
-  ```bash
-  cd frontend
-  ```
-2. Install dependencies:
-  ```bash
-  npm install
-  ```
-3. Create a `.env` file based on the example file:
-  ```bash
-  cp .env.example .env
-  ```
-4. Set the `VITE_API_URL` variable with your backend URL:
-  ```env
-  VITE_API_URL=http://localhost:4000
-  ```
-### **3. Configure the Backend**
-1. Navigate to the backend directory:
-  ```bash
-  cd ../backend
-  ```
-2. Install dependencies:
-  ```bash
-  npm install
-  ```
-3. Create a `.env` file based on the example file:
-  ```bash
-  cp .env.example .env
-  ```
-4. Set the following variables in the `.env` file:
-  ```env
-  PORT=4000
-  MONGO_URI=mongodb://root:mongo@mongo:27017/onelink?authSource=admin
-  FRONTEND_URL=http://localhost:5173
-  JWT_SECRET=your_jwt_secret
-  CLOUDINARY_NAME=your_cloudinary_name
-  CLOUDINARY_API_KEY=your_cloudinary_api_key
-  CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-  ```
-### **4. Start the Application**
-- **Frontend**:
-  ```bash
-  cd frontend
-  npm run dev
-  ```
-  Access [http://localhost:5173](http://localhost:5173).
-- **Backend**:
-  ```bash
-  cd backend
-  npm run dev
-  ```
-  Access [http://localhost:4000](http://localhost:4000).
----
-## **Project Structure**
-```plaintext
-onelink/
-├── frontend/          # Client code
-│   ├── src/
-│   ├── public/
-│   └── package.json
-├── backend/           # Server code
-│   ├── src/
-│   └── package.json
-├── docker-compose.yml # Docker configuration
-├── README.md          # Main documentation
-└── LICENSE            # Project license
+
+### **2. Setup Environment Variables**
+
+Create a `.env` file inside the `backend` folder based on `backend/.env.template`:
+```env
+PORT=4000
+MONGO_URI=mongodb://root:mongo@localhost:27017/onelink?authSource=admin
+FRONTEND_URL=http://localhost:5173
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
+
+Create a `.env` file inside the `frontend` folder:
+```env
+VITE_API_URL=http://localhost:4000
+```
+
+### **3. Install Workspace Dependencies**
+Install all dependencies for both frontend and backend using `pnpm` from the root directory:
+```bash
+pnpm install
+```
+
+### **4. Start Local MongoDB Database**
+If you have Docker, start the MongoDB container in the background:
+```bash
+docker-compose up -d mongo
+```
+
+### **5. Run Development Servers**
+Start both frontend and backend development servers concurrently with a single command from the root:
+```bash
+pnpm dev
+```
+*   **Frontend**: Access at [http://localhost:5173](http://localhost:5173)
+*   **Backend / API Docs**: View Swagger interactive docs at [http://localhost:4000/api-docs](http://localhost:4000/api-docs)
+
+---
+
+## **Monorepo Workspace Commands**
+
+Run these commands from the root directory:
+
+*   `pnpm dev`: Start both frontend and backend development servers concurrently.
+*   `pnpm build`: Run TypeScript compiler (`tsc`) on backend and bundle production build for frontend.
+*   `pnpm --filter onelink-frontend <cmd>`: Run a script specifically inside the frontend workspace.
+*   `pnpm --filter onelink-backend <cmd>`: Run a script specifically inside the backend workspace.
+
+---
+
+## **Production Deployment**
+
+Refer to [deploy_config.md](file:///c:/Users/crisa/Workspace/onelink/deploy_config.md) for the complete, step-by-step production deployment instructions for **MongoDB Atlas**, **Render**, and **Vercel**.
