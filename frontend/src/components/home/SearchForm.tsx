@@ -35,21 +35,21 @@ function SearchForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSearch)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleSearch)} className="space-y-4">
         <div className="w-full max-w-md mx-auto">
-          <div className="flex flex-col sm:flex-row items-center space-x-2 mb-2">
-            <div className="flex flex-col sm:flex-row items-center w-full border rounded-lg">
-              <span className="p-2">onelink.app/</span>
+          <div className="flex flex-col sm:flex-row items-stretch gap-2 p-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+            <div className="flex items-center flex-1 px-3 py-1">
+              <span className="text-zinc-400 dark:text-zinc-500 font-semibold select-none">onelink.app/</span>
               <FormField
                 control={form.control}
                 name="handle"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex-1">
                     <FormControl>
-                      <Input
+                      <input
                         type="text"
                         placeholder="username"
-                        className="w-full border-none focus:!ring-transparent focus:!border-none text-center sm:text-left"
+                        className="w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0 p-0 text-zinc-900 dark:text-zinc-50 font-bold ml-0.5 placeholder:font-normal placeholder:text-zinc-400 dark:placeholder:text-zinc-650"
                         {...field}
                       />
                     </FormControl>
@@ -57,7 +57,7 @@ function SearchForm() {
                 )}
               />
             </div>
-            <Button type="submit" size="lg" className="m-2 sm:m-0">
+            <Button type="submit" size="lg" className="rounded-lg font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/10 transition-all">
               Claim your Onelink
             </Button>
           </div>
