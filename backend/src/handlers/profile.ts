@@ -22,6 +22,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     req.user!.handle = handle;
     req.user!.description = req.body.description;
     req.user!.links = req.body.links;
+    req.user!.profileTheme = req.body.profileTheme;
     await req.user!.save();
     res.send(req.user);
   } catch (error) {

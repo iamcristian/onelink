@@ -53,8 +53,8 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto min-h-screen">
-      <Card>
+    <div className="w-full flex items-center justify-center py-12">
+      <Card className="w-full max-w-md border border-zinc-200 dark:border-zinc-800 shadow-sm">
         <CardHeader>
           <CardTitle className="text-3xl font-bold">Login</CardTitle>
         </CardHeader>
