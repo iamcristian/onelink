@@ -7,6 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./swagger";
 import routerAuth from "./routes/auth.routes";
 import router from "./routes/user.routes";
+import routerAnalytics from "./routes/analytics.routes";
 import helmet from "helmet";
 import apiLimiter from "./config/rateLimit";
 
@@ -33,6 +34,7 @@ app.use("/", apiLimiter);
 // Define the routes
 app.use("/api", routerAuth);
 app.use("/api", router);
+app.use("/api", routerAnalytics);
 
 // Global error handling middleware
 app.use(
